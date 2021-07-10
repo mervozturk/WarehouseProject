@@ -1,0 +1,24 @@
+﻿<Window x:Class="Screens.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Screens"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Image Source="C:\Users\90542\source\repos\WarehouseProject\Screens\Images/box.png"  VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Image Source="C:\Users\90542\source\repos\WarehouseProject\Screens\Images/List.jpg"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="300"/>
+
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Padding="32" Width="350" Height="250" >
+            <StackPanel VerticalAlignment="Top" >
+                <TextBox Name="txtEmail" Margin="0,10" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Book Antiqua" FontSize="15"/>
+                <PasswordBox Name="password" Margin="0,10" materialDesign:HintAssist.Hint="Şifre" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Book Antiqua" FontSize="15"/>
+                <Button Width="150" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="80,20" Content="Giriş Yap" Name="btnLogin" Click="btnLogin_Click" />
+            </StackPanel>
+            
+        </materialDesign:Card>
+
+    </Grid>
+</Window>
