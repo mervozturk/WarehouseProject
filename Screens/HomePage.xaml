@@ -30,7 +30,7 @@
                 <ListViewItem Height="60">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ContentSaveAllOutline" Foreground="White"  Height="30" Width="30" Margin="10"/>
-                        <TextBlock Text="Stok Kayıt" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <TextBlock Text="Ürün Kayıt" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
                     </StackPanel>
                 </ListViewItem>
                 <ListViewItem Height="60">

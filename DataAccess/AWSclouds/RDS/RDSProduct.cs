@@ -58,9 +58,9 @@ namespace DataAccess.AWSclouds.RDS
             return new ErrorDataResult<Product>(Message.Error);
         }
 
-        public DataResult<ObservableCollection<Product>> GetAll()
+        public DataResult<ObservableCollection<Product>> GetAll(string sqlQuery)
         {
-            string sqlQuery = "SELECT* FROM Warehouse.Products ";
+            //string sqlQuery = "SELECT* FROM Warehouse.Products ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<Product> Products = new ObservableCollection<Product>();

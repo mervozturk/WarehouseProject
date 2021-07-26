@@ -59,9 +59,9 @@ namespace DataAccess.AWSclouds.RDS
             return new ErrorDataResult<User>(Message.Error);
         }
        
-        public DataResult<ObservableCollection<User>> GetAll()
+        public DataResult<ObservableCollection<User>> GetAll(string sqlQuery)
         {
-            string sqlQuery = "SELECT* FROM Warehouse.Users ";
+            //string sqlQuery = "SELECT* FROM Warehouse.Users ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<User> Users = new ObservableCollection<User>();

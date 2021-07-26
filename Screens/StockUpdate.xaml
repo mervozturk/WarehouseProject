@@ -2,11 +2,33 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Screens"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-            
+        <materialDesign:Card  materialDesign:ShadowAssist.ShadowDepth="Depth3" Padding="30" Margin="20" VerticalAlignment="Center"  HorizontalAlignment="Center">
+            <Grid>
+                <StackPanel>
+                    <ComboBox Name="ProductComboBox" Width="575"  HorizontalAlignment="Center" Margin="30,10" materialDesign:HintAssist.Hint="Ürün Seçiniz" SelectionChanged="ProductComboBox_SelectionChanged"/>
+                    <StackPanel Orientation="Horizontal" >
+                        <ComboBox Name="WarehouseComboBox"  materialDesign:HintAssist.Hint="Depo seçiniz" Margin="70,10" />
+                        <ComboBox Name="CategoryComboBox"  materialDesign:HintAssist.Hint="kategory seçiniz" Margin="200,10"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBox Name="NameTxt"  Width="250" HorizontalAlignment="Left" Margin="70,10" materialDesign:HintAssist.Hint="Ürün ismi girniz" />
+                        <TextBox Name="UnitsInStockTxt"  Width="250" HorizontalAlignment="Left" Margin="70,10" materialDesign:HintAssist.Hint="Ürün stok girniz" />
+                        <TextBox Name="PriceTxt"  Width="250" HorizontalAlignment="Left" Margin="70,10" materialDesign:HintAssist.Hint="Ürün fiyatı girniz" />
+                    </StackPanel>
+
+                </StackPanel>
+                <TextBox Name="DescriptionTxt" Width="200" Height="40" Margin="60,105,110,0" HorizontalAlignment="Right"  materialDesign:HintAssist.Hint="Açıklama"/>
+               
+
+            </Grid>
+        </materialDesign:Card>
+        <Button HorizontalAlignment="Center" Width="250" Margin="60,350,60,0" Content="Güncelle" Click="Button_Click"/>
+
     </Grid>
 </UserControl>

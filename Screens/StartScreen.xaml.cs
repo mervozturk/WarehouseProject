@@ -52,27 +52,15 @@ namespace Screens
         {
             DataResult<User> result = _awsUser.Get("SELECT * FROM Warehouse.Users Where ID = '" + UId + "'");
             user = result.Data;
-            if (!result.Success)
-            {
-                MessageBox.Show("hata");
-            }
             ObservableCollection<ProductDTO> productList = new ObservableCollection<ProductDTO>();
-            products = _awsProduct.GetAll().Data;                                        
-            categories = _awsCategory.GetAll().Data;
-            warehouses = _awsWarehouse.GetAll().Data;
+            products = _awsProduct.GetAll("SELECT* FROM Warehouse.Products ").Data;                                        
+            categories = _awsCategory.GetAll("SELECT* FROM Warehouse.Categorys ").Data;
+            warehouses = _awsWarehouse.GetAll("SELECT* FROM Warehouse.Warehouses Where CustomerID='" + user.CustomerId + "'").Data;
 
-            var WarehouseList = from w in warehouses
-                                where w.CustomerID == user.CustomerId
-                                select new Warehouse
-                                {
-                                    CustomerID = w.CustomerID,
-                                    WarehouseId = w.WarehouseId,
-                                    WarehouseName = w.WarehouseName
-                                };
 
             for (int i = 0; i < products.Count; i++)
             {
-                if (WarehouseList.Any(w => w.WarehouseId == products[i].WarehouseID))
+                if (warehouses.Any(w => w.WarehouseId == products[i].WarehouseID))
                 {
                     var categoryname = from c in categories
                                        where products[i].CategoryId == c.CategoryId

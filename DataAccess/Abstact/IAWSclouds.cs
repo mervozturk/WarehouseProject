@@ -1,4 +1,5 @@
 ﻿using Core.Results;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace DataAccess.Abstact
         Result Add(T entity);
         Result Update(T entity);
         Result Delete(T entity);
-        DataResult<ObservableCollection<T>> GetAll();
+        DataResult<ObservableCollection<T>> GetAll(string sqlQuery);
         DataResult<T> Get(string sqlQuery);
     }
 }

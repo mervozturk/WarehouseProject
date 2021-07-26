@@ -22,7 +22,7 @@ namespace DataAccess.AWSclouds.RDS
 
         public Result Delete(Category entity)
         {
-            string sqlQuery = "DELETE FROM Warehouse.Categorys WHERE Id='" + entity.CategoryId + "'";
+            string sqlQuery = "DELETE FROM Warehouse.Categorys WHERE CategoryID='" + entity.CategoryId + "'";
             Result result = RDSBase.Crud(sqlQuery);
             return result;
         }
@@ -53,9 +53,9 @@ namespace DataAccess.AWSclouds.RDS
             return new ErrorDataResult<Category>(Message.Error);
         }
 
-        public DataResult<ObservableCollection<Category>> GetAll()
+        public DataResult<ObservableCollection<Category>> GetAll(string sqlQuery)
         {
-            string sqlQuery = "SELECT* FROM Warehouse.Categorys ";
+            //string sqlQuery = "SELECT* FROM Warehouse.Categorys ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<Category> categories = new ObservableCollection<Category>();
