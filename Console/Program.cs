@@ -39,9 +39,9 @@ namespace ConsoleUI
             //customer.Add(new Customer { CompanyName = "Tdd aş" });
 
 
-            //DynamoDBProduct product = new DynamoDBProduct();
-            //Result result = product.Add(new Product { Id = 2, CategoryId = 1, WarehouseID = 1, ProductName = "Jel Kalem", UnitPrice = 100, UnitsInStock = 10, Description = "Pensan Myking" });
-            //Console.WriteLine(result.Success);
+            DynamoDBProduct product = new DynamoDBProduct();
+            Result result = product.Add(new Product { Id = 2, CategoryId = 1, WarehouseID = 1, ProductName = "Jel Kalem", UnitPrice = 100, UnitsInStock = 10, Description = "Pensan Myking" });
+            Console.WriteLine(result.Success);
 
         }
     }
