@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace DataAccess.AWSclouds.RDS
@@ -27,35 +28,15 @@ namespace DataAccess.AWSclouds.RDS
             return result;
         }
 
-        public DataResult<Customer> Get(string sqlQuery)
+        public DataResult<Customer> Get(Func<Customer, bool> filter = null)
         {
-            RDSConnection connection = new RDSConnection();
-            connection.sqlConnection.Open();
-            if (connection.sqlConnection.State != ConnectionState.Closed)
-            {
-                MySqlDataReader baglayici;
-                MySqlCommand komut = new MySqlCommand();
-                //string sqlsorgusu = "SELECT * FROM Warehouse.Customers Where ID='" + Id + "'";
-                komut.CommandText = sqlQuery;
-                komut.Connection = connection.sqlConnection;
-                baglayici = komut.ExecuteReader();
-                if (baglayici.Read())
-                {
-                    Customer customer = new Customer();
-                    customer.Id = (int)baglayici["ID"];
-                    customer.CompanyName = baglayici["Companyname"].ToString();
-
-                    connection.sqlConnection.Close();
-                    return new SuccessDataResult<Customer>(customer, Message.succces);
-                }
-            }
-            connection.sqlConnection.Close();
-            return new ErrorDataResult<Customer>(Message.Error);
+            return filter == null ? new SuccessDataResult<Customer>() :
+               new SuccessDataResult<Customer>(GetAll().Data.Single(filter));
         }
 
-        public DataResult<ObservableCollection<Customer>> GetAll(string sqlQuery)
+        public DataResult<ObservableCollection<Customer>> GetAll(Func<Customer, bool> filter = null)
         {
-            //string sqlQuery = "SELECT* FROM Warehouse.Customers ";
+            string sqlQuery = "SELECT* FROM Warehouse.Customers ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<Customer> customers = new ObservableCollection<Customer>();
@@ -66,9 +47,8 @@ namespace DataAccess.AWSclouds.RDS
                 customer.CompanyName = (string)dataRow["CompanyName"];
                 customers.Add(customer);
             }
-
-
-            return new SuccessDataResult<ObservableCollection<Customer>>(customers, result.Message);
+            return filter == null ? new SuccessDataResult<ObservableCollection<Customer>>(customers) :
+               new SuccessDataResult<ObservableCollection<Customer>>((ObservableCollection<Customer>)customers.Where(filter));
         }
 
         public Result Update(Customer entity)

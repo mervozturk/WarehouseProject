@@ -39,23 +39,23 @@ namespace Screens
         public StartScreen()
         {
             InitializeComponent();
-            UId = FileManager.Read();
+            UId = FileManager.ReadUID();
             _awsCategory = new RDSCategory();
             _awsProduct = new RDSProduct();
             _awsWarehouse = new RDSWarehouse();
             _awsUser = new RDSUser();
             Productlist.ItemsSource = ItemList();
-            
+
         }
 
         public ObservableCollection<ProductDTO> ItemList()
         {
-            DataResult<User> result = _awsUser.Get("SELECT * FROM Warehouse.Users Where ID = '" + UId + "'");
+            DataResult<User> result = _awsUser.Get(u=>u.Id==UId);
             user = result.Data;
             ObservableCollection<ProductDTO> productList = new ObservableCollection<ProductDTO>();
-            products = _awsProduct.GetAll("SELECT* FROM Warehouse.Products ").Data;                                        
-            categories = _awsCategory.GetAll("SELECT* FROM Warehouse.Categorys ").Data;
-            warehouses = _awsWarehouse.GetAll("SELECT* FROM Warehouse.Warehouses Where CustomerID='" + user.CustomerId + "'").Data;
+            products = _awsProduct.GetAll().Data;
+            categories = _awsCategory.GetAll().Data;
+            warehouses = _awsWarehouse.GetAll(W=>W.CustomerID==user.CustomerId).Data;
 
 
             for (int i = 0; i < products.Count; i++)
@@ -80,7 +80,7 @@ namespace Screens
                     };
                     productList.Add(productDTO);
                 }
-                
+
             }
             return productList;
         }

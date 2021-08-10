@@ -13,7 +13,7 @@ namespace DataAccess.Abstact
         Result Add(T entity);
         Result Update(T entity);
         Result Delete(T entity);
-        DataResult<ObservableCollection<T>> GetAll(string sqlQuery);
-        DataResult<T> Get(string sqlQuery);
+        DataResult<ObservableCollection<T>> GetAll(Func<T, bool> filter = null);
+        DataResult<T> Get(Func<T, bool> filter = null);
     }
 }

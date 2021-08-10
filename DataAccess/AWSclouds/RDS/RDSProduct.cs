@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace DataAccess.AWSclouds.RDS
 {
-    public class RDSProduct : IAWSclouds<Product>
+    public class RDSProduct:IAWSclouds<Product>
     {
         public Result Add(Product entity)
         {
@@ -27,40 +28,15 @@ namespace DataAccess.AWSclouds.RDS
             return result;
         }
 
-        public DataResult<Product> Get(string sqlQuery)
+        public DataResult<Product> Get(Func<Product, bool> filter = null)
         {
-            RDSConnection connection = new RDSConnection();
-            connection.sqlConnection.Open();
-            if (connection.sqlConnection.State != ConnectionState.Closed)
-            {
-                MySqlDataReader baglayici;
-                MySqlCommand komut = new MySqlCommand();
-                //string sqlsorgusu = "SELECT * FROM Warehouse.Products Where ID='" + Id + "'";
-                komut.CommandText = sqlQuery;
-                komut.Connection = connection.sqlConnection;
-                baglayici = komut.ExecuteReader();
-                if (baglayici.Read())
-                {
-                    Product product = new Product();
-                    product.Id = (int)baglayici["Id"];
-                    product.WarehouseID = (int)baglayici["WarehouseID"];
-                    product.CategoryId = (int)baglayici["CategoryID"];
-                    product.ProductName = (string)baglayici["ProductName"];
-                    product.UnitsInStock = (int)baglayici["UnitsInStock"];
-                    product.UnitPrice = (double)baglayici["UnitPrice"];
-                    product.Description = (string)baglayici["Description"];
-
-                    connection.sqlConnection.Close();
-                    return new SuccessDataResult<Product>(product, Message.succces);
-                }
-            }
-            connection.sqlConnection.Close();
-            return new ErrorDataResult<Product>(Message.Error);
+            return filter == null ? new SuccessDataResult<Product>() :
+                new SuccessDataResult<Product>(GetAll().Data.Single(filter));
         }
 
-        public DataResult<ObservableCollection<Product>> GetAll(string sqlQuery)
+        public DataResult<ObservableCollection<Product>> GetAll(Func<Product, bool> filter = null)
         {
-            //string sqlQuery = "SELECT* FROM Warehouse.Products ";
+            string sqlQuery = "SELECT* FROM Warehouse.Products ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<Product> Products = new ObservableCollection<Product>();
@@ -76,9 +52,8 @@ namespace DataAccess.AWSclouds.RDS
                 product.Description = (string)dataRow["Description"];
                 Products.Add(product);
             }
-
-
-            return new SuccessDataResult<ObservableCollection<Product>>(Products, result.Message);
+            return filter == null ? new SuccessDataResult<ObservableCollection<Product>>(Products) :
+               new SuccessDataResult<ObservableCollection<Product>>((ObservableCollection<Product>)Products.Where(filter));
         }
 
         public Result Update(Product entity)

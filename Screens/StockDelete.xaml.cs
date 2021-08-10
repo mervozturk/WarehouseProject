@@ -37,16 +37,16 @@ namespace Screens
         public StockDelete()
         {
             InitializeComponent();
-            UId = FileManager.Read();
+            UId = FileManager.ReadUID();
 
             _awsCategory = new RDSCategory();
             _awsWarehouse = new RDSWarehouse();
             _awsUser = new RDSUser();
             _awsProduct = new RDSProduct();
 
-            user = _awsUser.Get("SELECT* FROM Warehouse.Users Where ID='" + UId + "'").Data;
-            warehouses = _awsWarehouse.GetAll("SELECT* FROM Warehouse.Warehouses Where CustomerID='" + user.CustomerId + "'").Data;
-            categories = _awsCategory.GetAll("SELECT* FROM Warehouse.Categorys").Data;
+            user = _awsUser.Get(u=>u.Id==UId).Data;
+            warehouses = _awsWarehouse.GetAll(W=>W.CustomerID==user.CustomerId).Data;
+            categories = _awsCategory.GetAll().Data;
             products = new ObservableCollection<Product>();
 
             WarehouseComboBox.ItemsSource = WarehouseList();
@@ -119,7 +119,7 @@ namespace Screens
                 ObservableCollection<Product> productsUID = new ObservableCollection<Product>();
                 Warehouse warehouse = warehouses.Single(w => w.WarehouseName == WarehouseComboBox.SelectedItem.ToString());
                 Category category = categories.Single(c => c.CategoryName == CategoryComboBox.SelectedItem.ToString());
-                products = _awsProduct.GetAll("SELECT* FROM Warehouse.Products").Data;
+                products = _awsProduct.GetAll().Data;
                 for (int i = 0; i < products.Count; i++)
                 {
                     if (products[i].WarehouseID == warehouse.WarehouseId && products[i].CategoryId == category.CategoryId)
@@ -139,6 +139,6 @@ namespace Screens
         {
             ComboBoxSelectionChanged();
         }
-       
+
     }
 }

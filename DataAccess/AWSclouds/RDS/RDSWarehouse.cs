@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace DataAccess.AWSclouds.RDS
 {
-    public class RDSWarehouse : IAWSclouds<Warehouse>
+    public class RDSWarehouse  : IAWSclouds<Warehouse>
     {
         public Result Add(Warehouse entity)
         {
@@ -27,39 +28,18 @@ namespace DataAccess.AWSclouds.RDS
             return result;
         }
 
-        public DataResult<Warehouse> Get(string sqlQuery)
+        public DataResult<Warehouse> Get(Func<Warehouse, bool> filter = null)
         {
-            RDSConnection connection = new RDSConnection();
-            connection.sqlConnection.Open();
-            if (connection.sqlConnection.State != ConnectionState.Closed)
-            {
-                MySqlDataReader baglayici;
-                MySqlCommand komut = new MySqlCommand();
-                //string sqlsorgusu = "SELECT * FROM Warehouse.Warehouses Where ID='" + Id + "'";
-                komut.CommandText = sqlQuery;
-                komut.Connection = connection.sqlConnection;
-                baglayici = komut.ExecuteReader();
-                if (baglayici.Read())
-                {
-                    Warehouse warehouse = new Warehouse();
-                    warehouse.WarehouseId = (int)baglayici["WarehouseID"];
-                    warehouse.CustomerID = (int)baglayici["CustomerID"];
-                    warehouse.WarehouseName = baglayici["Warehousename"].ToString();
-
-                    connection.sqlConnection.Close();
-                    return new SuccessDataResult<Warehouse>(warehouse, Message.succces);
-                }
-            }
-            connection.sqlConnection.Close();
-            return new ErrorDataResult<Warehouse>(Message.Error);
+            return filter == null ? new SuccessDataResult<Warehouse>() :
+               new SuccessDataResult<Warehouse>(GetAll().Data.Single(filter));
         }
 
-        public DataResult<ObservableCollection<Warehouse>> GetAll(string sqlQuery)
+        public DataResult<ObservableCollection<Warehouse>> GetAll(Func<Warehouse, bool> filter = null)
         {
-            //string sqlQuery = "SELECT* FROM Warehouse.Warehouses Where CustomerID='" + entity.CustomerId  + "'";
+            string sqlQuery = "SELECT* FROM Warehouse.Warehouses";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
-            ObservableCollection<Warehouse> warehouses= new ObservableCollection<Warehouse>();
+            ObservableCollection<Warehouse> warehouses = new ObservableCollection<Warehouse>();
             foreach (DataRow dataRow in result.Data.Rows)
             {
                 Warehouse warehouse = new Warehouse();
@@ -69,8 +49,8 @@ namespace DataAccess.AWSclouds.RDS
                 warehouses.Add(warehouse);
             }
 
-
-            return new SuccessDataResult<ObservableCollection<Warehouse>>(warehouses, result.Message);
+            return filter == null ? new SuccessDataResult<ObservableCollection<Warehouse>>(warehouses) :
+               new SuccessDataResult<ObservableCollection<Warehouse>>(new ObservableCollection<Warehouse>(warehouses.Where(filter)));
         }
 
         public Result Update(Warehouse entity)

@@ -35,12 +35,12 @@ namespace Screens
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            if(txtEmail.Text==""  || password.Password == "")
+            if (txtEmail.Text == "" || password.Password == "")
             {
                 MessageBox.Show("Boş alan bırakmayınız!");
             }
 
-            DataResult<User> result= _awsCloud.Get("SELECT * FROM Warehouse.Users Where Email='" + txtEmail.Text.ToString() + "'");
+            DataResult<User> result = _awsCloud.Get(u=>u.Email==txtEmail.Text);
             if (result.Success)
             {
                 User user = result.Data;
@@ -59,7 +59,7 @@ namespace Screens
                 //}
                 if (user.Password == password.Password)
                 {
-                    FileManager.Write(user.Id);
+                    FileManager.WriteUID(user.Id);
                     HomePage homePage = new HomePage();
                     homePage.Show();
                     base.Close();

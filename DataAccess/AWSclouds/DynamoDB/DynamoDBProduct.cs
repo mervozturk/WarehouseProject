@@ -11,9 +11,11 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Runtime;
+using System.Linq.Expressions;
+
 namespace DataAccess.AWSclouds.DynamoDB
 {
-    public class DynamoDBProduct : IAWSclouds<Product>
+    public class DynamoDBProduct  /*IAWSclouds<Product>*/
     {
         public Result Add(Product entity)
         {
@@ -28,7 +30,7 @@ namespace DataAccess.AWSclouds.DynamoDB
                     { "ProductName", new AttributeValue { S = entity.ProductName}},
                     { "UnitPrice", new AttributeValue { N = entity.UnitPrice.ToString()}},
                     { "UnitsInStok", new AttributeValue { N = entity.UnitsInStock.ToString()}},
-                    { "Description", new AttributeValue { S = entity.Description}},
+                    { "Description", new AttributeValue { S = entity.Description}}
                 }
             };
             if (DynamoDBConnection.client.PutItemAsync(request).IsCompleted)
@@ -43,12 +45,12 @@ namespace DataAccess.AWSclouds.DynamoDB
             throw new NotImplementedException();
         }
 
-        public DataResult<Product> Get(string sqlQuery)
+        public DataResult<Product> Get(Expression<Func<Product, bool>> filter = null)
         {
             throw new NotImplementedException();
         }
 
-        public DataResult<ObservableCollection<Product>> GetAll(string sqlQuery)
+        public DataResult<ObservableCollection<Product>> GetAll(Expression<Func<Product, bool>> filter = null)
         {
             throw new NotImplementedException();
         }

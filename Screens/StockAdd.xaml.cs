@@ -35,16 +35,16 @@ namespace Screens
         public StockAdd()
         {
             InitializeComponent();
-            UId = FileManager.Read();
-           
+            UId = FileManager.ReadUID();
+
             _awsCategory = new RDSCategory();
             _awsWarehouse = new RDSWarehouse();
             _awsUser = new RDSUser();
             _awsProduct = new RDSProduct();
 
-            user = _awsUser.Get("SELECT* FROM Warehouse.Users Where ID='" + UId + "'").Data;
-            warehouses = _awsWarehouse.GetAll("SELECT* FROM Warehouse.Warehouses Where CustomerID='" + user.CustomerId + "'").Data;
-            categories = _awsCategory.GetAll("SELECT* FROM Warehouse.Categorys").Data;
+            user = _awsUser.Get(u=>u.Id==UId).Data;
+            warehouses = _awsWarehouse.GetAll(w=>w.CustomerID==user.CustomerId).Data;
+            categories = _awsCategory.GetAll().Data;
 
             WarehouseComboBox.ItemsSource = WarehouseList();
             CategoryComboBox.ItemsSource = CategoryList();

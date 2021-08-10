@@ -43,17 +43,17 @@ namespace Screens
 
         public StockUpdate()
         {
-            InitializeComponent(); UId = FileManager.Read();
+            InitializeComponent(); UId = FileManager.ReadUID();
 
             _awsWarehouse = new RDSWarehouse();
             _awsUser = new RDSUser();
             _awsProduct = new RDSProduct();
             _awsCategory = new RDSCategory();
 
-            user = _awsUser.Get("SELECT* FROM Warehouse.Users Where ID='" + UId + "'").Data;
-            warehouses = _awsWarehouse.GetAll("SELECT* FROM Warehouse.Warehouses Where CustomerID='" + user.CustomerId + "'").Data;
+            user = _awsUser.Get(u => u.Id == UId).Data;
+            warehouses = _awsWarehouse.GetAll(W => W.CustomerID == user.CustomerId).Data;
+            categories = _awsCategory.GetAll().Data;
             products = GetProducts();
-            categories = _awsCategory.GetAll("SELECT * FROM Warehouse.Categorys").Data;
 
             ProductComboBox.ItemsSource = ProductList();
             CategoryComboBox.ItemsSource = CategoryList();
@@ -94,7 +94,7 @@ namespace Screens
         public ObservableCollection<Product> GetProducts()
         {
             ObservableCollection<Product> productsUID = new ObservableCollection<Product>();
-            products = _awsProduct.GetAll("SELECT* FROM Warehouse.Products").Data;
+            products = _awsProduct.GetAll().Data;
             for (int i = 0; i < products.Count; i++)
             {
                 if (warehouses.Any(w => w.WarehouseId == products[i].WarehouseID))

@@ -33,8 +33,8 @@ namespace Screens
             _awsWarehouse = new RDSWarehouse();
             _awsUser = new RDSUser();
 
-            UID = FileManager.Read();
-            user = _awsUser.Get("SELECT* FROM Warehouse.Users Where ID='" + UID+"'").Data;
+            UID = FileManager.ReadUID();
+            user = _awsUser.Get(u=>u.Id==UID).Data;
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)

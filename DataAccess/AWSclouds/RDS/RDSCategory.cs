@@ -7,11 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.AWSclouds.RDS
 {
-    public class RDSCategory : IAWSclouds<Category>
+    public class RDSCategory :IAWSclouds<Category>
     {
         public Result Add(Category entity)
         {
@@ -27,35 +29,16 @@ namespace DataAccess.AWSclouds.RDS
             return result;
         }
 
-        public DataResult<Category> Get(string sqlQuery)
-        {
-            RDSConnection connection = new RDSConnection();
-            connection.sqlConnection.Open();
-            if (connection.sqlConnection.State != ConnectionState.Closed)
-            {
-                MySqlDataReader baglayici;
-                MySqlCommand komut = new MySqlCommand();
-                //string sqlsorgusu = "SELECT * FROM Warehouse.Categorys Where ID='" + Id + "'";
-                komut.CommandText = sqlQuery;
-                komut.Connection = connection.sqlConnection;
-                baglayici = komut.ExecuteReader();
-                if (baglayici.Read())
-                {
-                    Category category = new Category();
-                    category.CategoryId = (int)baglayici["CategoryID"];  
-                    category.CategoryName= baglayici["Categoryname"].ToString();
 
-                    connection.sqlConnection.Close();
-                    return new SuccessDataResult<Category>(category, Message.succces);
-                }
-            }
-            connection.sqlConnection.Close();
-            return new ErrorDataResult<Category>(Message.Error);
+        public DataResult<Category> Get(Func<Category, bool> filter = null)
+        {                
+            return filter == null ? new SuccessDataResult<Category>() :
+               new SuccessDataResult<Category>(GetAll().Data.Single(filter));
         }
 
-        public DataResult<ObservableCollection<Category>> GetAll(string sqlQuery)
+        public DataResult<ObservableCollection<Category>> GetAll(Func<Category, bool> filter = null)
         {
-            //string sqlQuery = "SELECT* FROM Warehouse.Categorys ";
+            string sqlQuery = "SELECT* FROM Warehouse.Categorys ";
             DataResult<DataTable> result = RDSBase.Get(sqlQuery);
 
             ObservableCollection<Category> categories = new ObservableCollection<Category>();
@@ -64,11 +47,11 @@ namespace DataAccess.AWSclouds.RDS
                 Category category = new Category();
                 category.CategoryId = (int)dataRow["CategoryID"];
                 category.CategoryName = (string)dataRow["CategoryName"];
-               categories.Add(category);
+                categories.Add(category);
             }
+            return filter == null ? new SuccessDataResult<ObservableCollection<Category>>(categories) :
+               new SuccessDataResult<ObservableCollection<Category>>((ObservableCollection<Category>)categories.Where(filter));
 
-
-            return new SuccessDataResult<ObservableCollection<Category>>(categories, result.Message);
         }
 
         public Result Update(Category entity)

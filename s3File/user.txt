@@ -1,0 +1,8 @@
+﻿1,1,merhaba,test,test@deneme.com,123456
+2,2,Merve,Öztürk,Merve@deneme.com,123456
+3,2,Ali,Öz,Ali@deneme.com,123456
+4,2,Ayşe,kaya,Ayşe@deneme.com,123456
+5,2,Nagisa,çelik,Nagisa@deneme.com,123456
+6,2,Ahmet,Gürsoy,Ahmet@deneme.com,123456
+
+
