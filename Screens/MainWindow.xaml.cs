@@ -3,9 +3,11 @@ using Core.Hashing;
 using Core.Results;
 using DataAccess.Abstact;
 using DataAccess.AWSclouds.RDS;
+using DataAccess.AWSclouds.S3;
 using Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,14 +29,27 @@ namespace Screens
     public partial class MainWindow : Window
     {
         IAWSclouds<User> _awsCloud;
+        ObservableCollection<string> database;
         public MainWindow()
         {
             InitializeComponent();
-            _awsCloud = new RDSUser();
+            database = new ObservableCollection<string> { "RDS", "S3" };
+            SelectDatabase.ItemsSource = database;
+
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            string Dbase = FileManager.ReadDatabase();
+            if (Dbase=="RDS")
+            {
+                _awsCloud = new RDSUser();
+            }
+            else if (Dbase == "S3")
+            {
+                _awsCloud = new S3User();
+            }
+
             if (txtEmail.Text == "" || password.Password == "")
             {
                 MessageBox.Show("Boş alan bırakmayınız!");
@@ -71,6 +86,14 @@ namespace Screens
                 MessageBox.Show("Email kullanılmamaktadır.");
             }
 
+        }
+
+        private void SelectDatabase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SelectDatabase.SelectedIndex>0)
+            {
+                FileManager.WriteDatabase(database[SelectDatabase.SelectedIndex]);
+            }
         }
     }
 }

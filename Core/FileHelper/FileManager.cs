@@ -30,6 +30,29 @@ namespace Core.FileHelper
 
             return int.Parse(satir);
         }
+        public static void WriteDatabase(string database)
+        {
+            string dosyaYolu = @"C:\Users\90542\source\repos\WarehouseProject\database.txt";
+            File.WriteAllText(dosyaYolu, string.Empty);
+            FileStream fileStream = new FileStream(dosyaYolu, FileMode.Open, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(fileStream, Encoding.UTF8);
+            writer.WriteLine(database);
+            writer.Close();
+        }
+
+        public static string ReadDatabase()
+        {
+            string dosyaYolu = @"C:\Users\90542\source\repos\WarehouseProject\database.txt";
+            FileStream fileStream = new FileStream(dosyaYolu, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamReader reader = new StreamReader(fileStream);
+
+
+            string satir = reader.ReadLine();
+
+            reader.Close();
+
+            return satir;
+        }
         public static void Write(string FilePath,string line)
         {
             StreamWriter writer = File.AppendText(FilePath);

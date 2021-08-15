@@ -1,6 +1,7 @@
 ﻿using Core.FileHelper;
 using DataAccess.Abstact;
 using DataAccess.AWSclouds.RDS;
+using DataAccess.AWSclouds.S3;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,17 @@ namespace Screens
         public AddWarehouse()
         {
             InitializeComponent();
-
-            _awsWarehouse = new RDSWarehouse();
-            _awsUser = new RDSUser();
+            string Dbase = FileManager.ReadDatabase();
+            if (Dbase == "RDS")
+            {
+                _awsWarehouse = new RDSWarehouse();
+                _awsUser = new RDSUser();
+            }
+            else if (Dbase == "S3")
+            {
+                _awsWarehouse = new S3Warehouse();
+                _awsUser = new S3User();
+            }
 
             UID = FileManager.ReadUID();
             user = _awsUser.Get(u=>u.Id==UID).Data;

@@ -11,10 +11,11 @@
         <Image Source="C:\Users\90542\source\repos\WarehouseProject\Screens\Images/box.png"  VerticalAlignment="Top" HorizontalAlignment="Left" />
         <Image Source="C:\Users\90542\source\repos\WarehouseProject\Screens\Images/List.jpg"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="300"/>
 
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Padding="32" Width="350" Height="250" >
+        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth1" Padding="32,10" Width="350" Height="250" >
             <StackPanel VerticalAlignment="Top" >
                 <TextBox Name="txtEmail" Margin="0,10" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Book Antiqua" FontSize="15"/>
                 <PasswordBox Name="password" Margin="0,10" materialDesign:HintAssist.Hint="Şifre" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Book Antiqua" FontSize="15"/>
+                <ComboBox Name="SelectDatabase" materialDesign:HintAssist.Hint="Depolama yöntemi seçiniz" Width="150" SelectionChanged="SelectDatabase_SelectionChanged"/>
                 <Button Width="150" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="80,20" Content="Giriş Yap" Name="btnLogin" Click="btnLogin_Click" />
             </StackPanel>
             

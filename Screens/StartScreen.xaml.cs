@@ -2,6 +2,7 @@
 using Core.Results;
 using DataAccess.Abstact;
 using DataAccess.AWSclouds.RDS;
+using DataAccess.AWSclouds.S3;
 using Entities;
 using Entities.DTOs;
 using System;
@@ -40,10 +41,22 @@ namespace Screens
         {
             InitializeComponent();
             UId = FileManager.ReadUID();
-            _awsCategory = new RDSCategory();
-            _awsProduct = new RDSProduct();
-            _awsWarehouse = new RDSWarehouse();
-            _awsUser = new RDSUser();
+            string Dbase = FileManager.ReadDatabase();
+            if (Dbase == "RDS")
+            {
+                _awsCategory = new RDSCategory();
+                _awsWarehouse = new RDSWarehouse();
+                _awsUser = new RDSUser();
+                _awsProduct = new RDSProduct();
+            }
+            else if (Dbase == "S3")
+            {
+                _awsCategory = new S3Category();
+                _awsWarehouse = new S3Warehouse();
+                _awsUser = new S3User();
+                _awsProduct = new S3Product();
+            }
+           
             Productlist.ItemsSource = ItemList();
 
         }

@@ -1,6 +1,7 @@
 ﻿using Core.FileHelper;
 using DataAccess.Abstact;
 using DataAccess.AWSclouds.RDS;
+using DataAccess.AWSclouds.S3;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,16 @@ namespace Screens
         public AddCategory()
         {
             InitializeComponent();
-            _awsCategory = new RDSCategory();
+            string Dbase = FileManager.ReadDatabase();
+            if (Dbase == "RDS")
+            {
+                _awsCategory = new RDSCategory();
+            }
+            else if (Dbase == "S3")
+            {
+                _awsCategory = new S3Category();
+            }
+            
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)

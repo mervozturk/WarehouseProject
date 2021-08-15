@@ -1,6 +1,7 @@
 ﻿using Core.FileHelper;
 using DataAccess.Abstact;
 using DataAccess.AWSclouds.RDS;
+using DataAccess.AWSclouds.S3;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -36,11 +37,22 @@ namespace Screens
         {
             InitializeComponent();
             UId = FileManager.ReadUID();
+            string Dbase = FileManager.ReadDatabase();
+            if (Dbase == "RDS")
+            {
+                _awsCategory = new RDSCategory();
+                _awsWarehouse = new RDSWarehouse();
+                _awsUser = new RDSUser();
+                _awsProduct = new RDSProduct();
+            }
+            else if (Dbase == "S3")
+            {
+                _awsCategory = new S3Category();
+                _awsWarehouse = new S3Warehouse();
+                _awsUser = new S3User();
+                _awsProduct = new S3Product();
+            }
 
-            _awsCategory = new RDSCategory();
-            _awsWarehouse = new RDSWarehouse();
-            _awsUser = new RDSUser();
-            _awsProduct = new RDSProduct();
 
             user = _awsUser.Get(u=>u.Id==UId).Data;
             warehouses = _awsWarehouse.GetAll(w=>w.CustomerID==user.CustomerId).Data;
